@@ -1,0 +1,21 @@
+.navigation .ant-menu-item:not(:last-child) {
+  padding-bottom: 52px;
+  margin-bottom: 16px;
+}
+
+.navigation .ant-menu-item:first-child {
+  margin-top: 16px;
+}
+
+.navigation .ant-menu-item-selected {
+  background-color: inherit !important;
+}
+
+.navigation .navigation__item-label {
+  font-size: 12px;
+  line-height: 10px;
+}
+
+.navigation .ant-menu-item .anticon {
+  font-size: 30px;
+}

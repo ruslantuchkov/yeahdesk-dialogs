@@ -33,7 +33,8 @@ const initializeDB = () => {
   for (let i = 0; i < userCount; i++) {
     users.push({
       name: chance.name(),
-      id: chance.guid()
+      id: chance.guid(),
+      avatar: chance.avatar()
     });
   }
 

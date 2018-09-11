@@ -1,0 +1,15 @@
+.dialog-header {
+  position: relative;
+  background: #fff;
+  padding: 10px;
+  line-height: inherit;
+}
+
+.dialog-header__dialog-name {
+  display: inline;
+  margin-left: 10px;
+}
+
+.dialog-header__owner {
+  margin-left: 30px;
+}

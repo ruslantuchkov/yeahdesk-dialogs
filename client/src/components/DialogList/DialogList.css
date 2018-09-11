@@ -1,0 +1,58 @@
+.infinite-container {
+  overflow: auto;
+  padding: 8px 0;
+  height: 80%;
+}
+.loading-container {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+}
+
+.dialog-list__list-title {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.dialog-list__date {
+  display: inline-block;
+  margin-left: 10;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.dialog-list__name {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dialog-list__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dialog-list__user-name {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.dialog-list .ant-list-item {
+  padding: 6px 15px;
+  border-bottom: none;
+}
+
+.dialog-list .ant-list-item-meta,
+.dialog-list .ant-list-item-meta-content {
+  width: 80%;
+}
+
+.dialog-list .ant-list-item:hover {
+  cursor: pointer;
+  background-color: aliceblue;
+}
+
+.dialog-list__list-item--active {
+  background-color: #fff;
+}

@@ -1,0 +1,27 @@
+.dialog-group-select__btn {
+  width: 300px;
+  white-space: nowrap;
+  font-size: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.dialog-group-select__groups a {
+  display: block;
+  color: black;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.dialog-group-select__channels label {
+  display: block;
+}
+
+.dialog-group-select__filter-deleted-channels {
+  display: block;
+  width: max-content;
+  margin-top: 15px;
+  border-bottom: 1px black dashed;
+  cursor: pointer;
+}
