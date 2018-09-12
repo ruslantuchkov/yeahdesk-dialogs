@@ -4,7 +4,8 @@ import {
   SUCCESS,
   START,
   CHANGE_DIALOG_FINDING_PARAMS,
-  SUBMIT_CHANNEL_INPUT_TEXT
+  SUBMIT_CHANNEL_INPUT_TEXT,
+  RECEIVE_MESSAGE
 } from '../constants';
 
 const initialState = {
@@ -69,6 +70,33 @@ export const dialogs = (state = initialState, { type, payload }) => {
         ...state.entities.slice(idx + 1)
       ]
     };
+  }
+
+  if (type === RECEIVE_MESSAGE) {
+    const idx = state.entities.findIndex(({ id }) => id === payload.dialogID);
+    const dialog = state.entities[idx];
+
+    if (dialog && !dialog.messages.find(({ id }) => id === payload.id)) {
+      return {
+        ...state,
+
+        entities: [
+          ...state.entities.slice(0, idx),
+          {
+            ...dialog,
+            messages: [
+              ...dialog.messages,
+              {
+                id: payload.id,
+                content: payload.content,
+                owner: payload.owner
+              }
+            ]
+          },
+          ...state.entities.slice(idx + 1)
+        ]
+      };
+    }
   }
 
   return state;

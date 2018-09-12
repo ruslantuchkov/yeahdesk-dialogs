@@ -1,7 +1,13 @@
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const { dialogs, users, channels, initializeDB } = require('./initializeDB');
+const {
+  dialogs,
+  users,
+  channels,
+  initializeDB,
+  simulateActivity
+} = require('./initializeDB');
 const { createMessage, chance } = require('./utils');
 
 let app = express();
@@ -93,7 +99,7 @@ app.post(
       return res.status(404).send();
     }
     createMessage(io, dialogs, { userID, dialogID, messageID, date, input });
-    res.status(300).send();
+    res.status(200).send();
   }
 );
 
@@ -102,3 +108,5 @@ const port = 5000;
 server.listen(port, () => {
   console.info(`api-сервер запущен на порту ${port}`);
 });
+
+simulateActivity(io, currentUser.id);

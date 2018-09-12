@@ -103,7 +103,7 @@ export const setActiveDialog = id => ({
 
 export const addMessage = text => (dispatch, getState) => {
   const { currentUser, activeDialog } = getState();
-  const date = new Date();
+  const date = new Date().toISOString();
   const messageId = Date.now();
 
   dispatch({
@@ -123,5 +123,5 @@ export const addMessage = text => (dispatch, getState) => {
         currentUser.id
       }/${activeDialog}/${messageId}/${date}/${text}`
     )
-    .catch(error => dispatch({ type: 'RETRIVE_LAST_MESSAGE' }));
+    .catch(error => dispatch({ type: 'REJECT_MESSAGE_CREATION' }));
 };

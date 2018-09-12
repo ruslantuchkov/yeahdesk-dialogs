@@ -1,4 +1,4 @@
-const { chance } = require('./utils');
+const { chance, createMessage } = require('./utils');
 
 const dialogs = [];
 const users = [];
@@ -62,4 +62,30 @@ const initializeDB = () => {
   });
 };
 
-module.exports = { users, dialogs, channels, initializeDB };
+const interval = 2000;
+const max = 100;
+let count = 0;
+
+const simulateCreateMessage = io => {
+  if (count < max) {
+    count++;
+    const input = chance.sentence();
+    const messageID = chance.guid();
+    const dialog = chance.pick(
+      [...dialogs]
+        .sort((d1, d2) => new Date(d2.date) - new Date(d1.date))
+        .slice(0, 20)
+    );
+    const dialogID = dialog.id;
+    const userID = chance.pick(dialog.participants);
+    const date = new Date().toISOString();
+
+    createMessage(io, dialogs, { userID, dialogID, messageID, date, input });
+  }
+};
+
+function simulateActivity(io) {
+  setInterval(simulateCreateMessage, interval, io);
+}
+
+module.exports = { users, dialogs, channels, initializeDB, simulateActivity };
