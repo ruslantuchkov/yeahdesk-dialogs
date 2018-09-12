@@ -6,16 +6,18 @@ import {
   START,
   FAIL,
   SET_USERS_INFO,
-  CHANGE_DIALOG_FINDING_PARAMS
+  CHANGE_DIALOG_FINDING_PARAMS,
+  SET_CHANNELS
 } from './constants';
 import axios from 'axios';
 
 export const getCurrentUser = dispatch => {
-  axios
-    .get('/api/users/current')
-    .then(res =>
-      dispatch({ type: SET_CURRENT_USER, payload: { user: res.data } })
-    );
+  axios.get('/api/users/current').then(res =>
+    dispatch({
+      type: SET_CURRENT_USER,
+      payload: { user: res.data }
+    })
+  );
 };
 
 export const getUsers = userIds => (dispatch, getState) => {
@@ -38,14 +40,15 @@ export const getDialogs = (
   from = 0,
   to = 50,
   sort = 'new',
-  findValue = '_'
+  search = '_',
+  channels = '_'
 ) => dispatch => {
   dispatch({
     type: LOAD_DIALOGS + START
   });
 
   axios
-    .get(`/api/dialogs/${from}/${to}/${sort}/${findValue}`)
+    .get(`/api/dialogs/${from}/${to}/${sort}/${search}/${channels}`)
     .then(res => {
       if (from === 0) {
         dispatch({
@@ -81,3 +84,12 @@ export const changeFindingParams = params => ({
   type: CHANGE_DIALOG_FINDING_PARAMS,
   payload: { params }
 });
+
+export const getChannels = () => dispatch => {
+  axios.get(`/api/dialogs/channels`).then(res => {
+    dispatch({
+      type: SET_CHANNELS,
+      payload: { channels: res.data }
+    });
+  });
+};

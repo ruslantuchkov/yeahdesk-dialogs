@@ -11,7 +11,7 @@ const initialState = {
   loading: false,
   loaded: false,
   error: null,
-  findingParams: { search: '', sort: 'new' }
+  findingParams: { search: '', sort: 'new', channels: [] }
 };
 
 export const dialogs = (state = initialState, { type, payload }) => {

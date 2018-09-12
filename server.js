@@ -1,7 +1,7 @@
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const { dialogs, users, initializeDB } = require('./initializeDB');
+const { dialogs, users, channels, initializeDB } = require('./initializeDB');
 const { createMessage, chance } = require('./utils');
 
 let app = express();
@@ -19,13 +19,22 @@ app.get('/api/users/current', (req, res) => {
   res.json(currentUser);
 });
 
+app.get('/api/dialogs/channels', (req, res) => {
+  res.json(channels);
+});
+
 app.get(
-  '/api/dialogs/:from/:to/:sort/:findValue',
-  ({ params: { from, to, sort, findValue } }, res) => {
+  '/api/dialogs/:from/:to/:sort/:search/:channels',
+  ({ params: { from, to, sort, search, channels } }, res) => {
     let filteredDialogs = dialogs;
-    if (findValue !== '_') {
+    if (channels !== '_') {
+      filteredDialogs = filteredDialogs.filter(dialog => {
+        return channels.split(',').includes(dialog.channel[1]);
+      });
+    }
+    if (search !== '_') {
       filteredDialogs = dialogs.filter(dialog => {
-        return dialog.name.toLowerCase().match(findValue.toLowerCase());
+        return dialog.name.toLowerCase().match(search.toLowerCase());
       });
     }
     let sortedDialogs;

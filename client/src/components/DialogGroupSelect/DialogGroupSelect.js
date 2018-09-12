@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Popover, Icon, Checkbox } from 'antd';
 import './DialogGroupSelect.css';
+import { changeFindingParams, getDialogs } from '../../ac';
 
 const CheckboxGroup = Checkbox.Group;
+
+const mapStateToProps = state => ({
+  channels: state.channels,
+  findingParams: state.dialogs.findingParams
+});
 
 class DialogGroupSelect extends Component {
   state = {
     visible: false,
     groups: ['Мои диалоги', 'Открытые', 'Закрытые', 'Все диалоги'],
-    channels: [
-      { label: 'nidjel87@gamil.com', value: 'nidjel87@gamil.com' },
-      { label: 'ruslantuchkov@yandex.ru', value: 'ruslantuchkov@yandex.ru' }
-    ],
-    selectedChannels: [],
     activeGroup: 'Мои диалоги'
   };
 
@@ -34,14 +36,23 @@ class DialogGroupSelect extends Component {
   };
 
   onChannelsChange = checkedValues => {
-    this.setState({ selectedChannels: checkedValues });
+    const { sort, search } = this.props.findingParams;
+
+    this.props.changeFindingParams({ channels: checkedValues });
+    this.props.getDialogs(
+      undefined,
+      undefined,
+      sort || undefined,
+      search || undefined,
+      checkedValues.length ? checkedValues.join(',') : undefined
+    );
   };
 
   get popoverContent() {
     return (
       <div className="dialog-group-select__channels">
         <CheckboxGroup
-          options={this.state.channels}
+          options={this.props.channels}
           onChange={this.onChannelsChange}
         />
         <span className="dialog-group-select__filter-deleted-channels">
@@ -81,4 +92,7 @@ class DialogGroupSelect extends Component {
   }
 }
 
-export default DialogGroupSelect;
+export default connect(
+  mapStateToProps,
+  { changeFindingParams, getDialogs }
+)(DialogGroupSelect);

@@ -2,6 +2,12 @@ const { chance } = require('./utils');
 
 const dialogs = [];
 const users = [];
+const channels = [];
+
+const channelsCount = 4;
+for (let i = 0; i < channelsCount; i++) {
+  channels.push(chance.email());
+}
 
 const getRandomMessage = userIDs => ({
   id: chance.guid(),
@@ -23,12 +29,6 @@ const getMessages = (userIDs, count = 12) => {
 const initializeDB = () => {
   const userCount = 12;
   const dialogsCount = 1000;
-  const channelsCount = 4;
-  const channels = [];
-
-  for (let i = 0; i < channelsCount; i++) {
-    channels.push(chance.email());
-  }
 
   for (let i = 0; i < userCount; i++) {
     users.push({
@@ -62,4 +62,4 @@ const initializeDB = () => {
   });
 };
 
-module.exports = { users, dialogs, initializeDB };
+module.exports = { users, dialogs, channels, initializeDB };

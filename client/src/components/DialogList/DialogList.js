@@ -4,7 +4,7 @@ import { List, Avatar, Spin, message } from 'antd';
 import Moment from 'react-moment';
 import InfiniteScroll from 'react-infinite-scroller';
 import './DialogList.css';
-import { getDialogs } from '../../ac';
+import { getDialogs, getChannels } from '../../ac';
 
 const mapStateToProps = state => ({
   dialogs: state.dialogs.entities,
@@ -17,10 +17,13 @@ const mapStateToProps = state => ({
 class DialogList extends Component {
   componentDidMount() {
     this.props.getDialogs();
+    this.props.getChannels();
   }
 
   handleInfiniteOnLoad = () => {
     let data = this.props.dialogs;
+    const { sort, search, channels } = this.props.findingParams;
+
     if (!this.props.hasMore) {
       message.warning('Все диалоги загружены');
       return;
@@ -28,8 +31,9 @@ class DialogList extends Component {
     this.props.getDialogs(
       data.length - 1,
       data.length - 1 + 50,
-      this.props.findingParams.sort || undefined,
-      this.props.findingParams.search || undefined
+      sort || undefined,
+      search || undefined,
+      channels.length ? channels.join(',') : undefined
     );
   };
 
@@ -97,5 +101,5 @@ class DialogList extends Component {
 
 export default connect(
   mapStateToProps,
-  { getDialogs }
+  { getDialogs, getChannels }
 )(DialogList);
