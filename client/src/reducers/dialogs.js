@@ -1,10 +1,17 @@
-import { LOAD_DIALOGS, LOAD_MORE_DIALOGS, SUCCESS, START } from '../constants';
+import {
+  LOAD_DIALOGS,
+  LOAD_MORE_DIALOGS,
+  SUCCESS,
+  START,
+  CHANGE_DIALOG_FINDING_PARAMS
+} from '../constants';
 
 const initialState = {
   entities: [],
   loading: false,
   loaded: false,
-  error: null
+  error: null,
+  findingParams: { search: '', sort: 'new' }
 };
 
 export const dialogs = (state = initialState, { type, payload }) => {
@@ -31,5 +38,13 @@ export const dialogs = (state = initialState, { type, payload }) => {
       hasMore: payload.hasMore
     };
   }
+
+  if (type === CHANGE_DIALOG_FINDING_PARAMS) {
+    return {
+      ...state,
+      findingParams: { ...state.findingParams, ...payload.params }
+    };
+  }
+
   return state;
 };

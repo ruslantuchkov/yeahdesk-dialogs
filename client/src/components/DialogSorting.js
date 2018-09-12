@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
 import { connect } from 'react-redux';
-import { getDialogs } from '../ac';
+import { getDialogs, changeFindingParams } from '../ac';
+
+const mapStateToProps = state => ({
+  sortDirection: state.dialogs.findingParams.sort
+});
 
 class DialogSorting extends Component {
   state = {
-    values: ['new', 'old'],
-    sortDirection: 'new'
+    values: ['new', 'old']
   };
 
   handleValueClick = val => () => {
+    this.props.changeFindingParams({ sort: val });
     this.props.getDialogs(undefined, undefined, val);
-
-    this.setState({
-      sortDirection: val
-    });
   };
 
   getSortValue = sortDirection => {
@@ -44,7 +44,7 @@ class DialogSorting extends Component {
             marginLeft: '20px'
           }}
         >
-          {this.getSortValue(this.state.sortDirection)}{' '}
+          {this.getSortValue(this.props.sortDirection)}{' '}
           <Icon type="caret-down" theme="outlined" />
         </a>
       </Dropdown>
@@ -53,6 +53,6 @@ class DialogSorting extends Component {
 }
 
 export default connect(
-  null,
-  { getDialogs }
+  mapStateToProps,
+  { getDialogs, changeFindingParams }
 )(DialogSorting);

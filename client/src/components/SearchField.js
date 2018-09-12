@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Input, Icon } from 'antd';
+import { getDialogs, changeFindingParams } from '../ac';
+
+const MapStateToProps = state => ({
+  value: state.dialogs.findingParams.search
+});
 
 class SearchField extends Component {
-  state = {
-    value: ''
-  };
-
   emitEmpty = () => {
     this.input.focus();
-    this.setState({ value: '' });
+    this.props.changeFindingParams({ search: '' });
+    this.props.getDialogs();
   };
 
   onChangeValue = e => {
-    this.setState({ value: e.target.value });
+    this.props.changeFindingParams({ search: e.target.value });
+    this.props.getDialogs(undefined, undefined, undefined, e.target.value);
   };
 
   render() {
-    const { value } = this.state;
+    const value = this.props.value;
     const suffix = value ? (
       <Icon type="close-circle" onClick={this.emitEmpty} />
     ) : null;
@@ -34,4 +38,7 @@ class SearchField extends Component {
   }
 }
 
-export default SearchField;
+export default connect(
+  MapStateToProps,
+  { getDialogs, changeFindingParams }
+)(SearchField);

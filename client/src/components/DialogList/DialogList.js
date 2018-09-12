@@ -10,7 +10,8 @@ const mapStateToProps = state => ({
   dialogs: state.dialogs.entities,
   loading: state.dialogs.loading,
   hasMore: state.dialogs.hasMore,
-  usersInfo: state.usersInfo
+  usersInfo: state.usersInfo,
+  findingParams: state.dialogs.findingParams
 });
 
 class DialogList extends Component {
@@ -24,7 +25,12 @@ class DialogList extends Component {
       message.warning('Все диалоги загружены');
       return;
     }
-    this.props.getDialogs(data.length - 1, data.length - 1 + 50);
+    this.props.getDialogs(
+      data.length - 1,
+      data.length - 1 + 50,
+      this.props.findingParams.sort || undefined,
+      this.props.findingParams.search || undefined
+    );
   };
 
   getTitle = item => (
@@ -38,9 +44,11 @@ class DialogList extends Component {
 
   getDescription = item => {
     const lastMessage = item.messages[item.messages.length - 1];
-    const userName = this.props.usersInfo.length
-      ? this.props.usersInfo.find(user => user.id === lastMessage.owner).name
-      : 'User Name';
+    const lastMessageOwner =
+      this.props.usersInfo.length &&
+      this.props.usersInfo.find(user => user.id === lastMessage.owner);
+
+    const userName = lastMessageOwner ? lastMessageOwner.name : 'User Name';
 
     return (
       <p className="dialog-list__description">

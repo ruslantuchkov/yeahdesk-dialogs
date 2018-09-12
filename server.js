@@ -20,15 +20,21 @@ app.get('/api/users/current', (req, res) => {
 });
 
 app.get(
-  '/api/dialogs/:from/:to/:sort',
-  ({ params: { from, to, sort } }, res) => {
+  '/api/dialogs/:from/:to/:sort/:findValue',
+  ({ params: { from, to, sort, findValue } }, res) => {
+    let filteredDialogs = dialogs;
+    if (findValue !== '_') {
+      filteredDialogs = dialogs.filter(dialog => {
+        return dialog.name.toLowerCase().match(findValue.toLowerCase());
+      });
+    }
     let sortedDialogs;
     if (sort === 'old') {
-      sortedDialogs = [...dialogs].sort(
+      sortedDialogs = [...filteredDialogs].sort(
         (d1, d2) => new Date(d1.date) - new Date(d2.date)
       );
     } else if (sort === 'new') {
-      sortedDialogs = [...dialogs].sort(
+      sortedDialogs = [...filteredDialogs].sort(
         (d1, d2) => new Date(d2.date) - new Date(d1.date)
       );
     }

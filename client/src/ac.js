@@ -5,7 +5,8 @@ import {
   SUCCESS,
   START,
   FAIL,
-  SET_USERS_INFO
+  SET_USERS_INFO,
+  CHANGE_DIALOG_FINDING_PARAMS
 } from './constants';
 import axios from 'axios';
 
@@ -33,13 +34,18 @@ export const getUsers = userIds => (dispatch, getState) => {
   );
 };
 
-export const getDialogs = (from = 0, to = 50, sort = 'new') => dispatch => {
+export const getDialogs = (
+  from = 0,
+  to = 50,
+  sort = 'new',
+  findValue = '_'
+) => dispatch => {
   dispatch({
     type: LOAD_DIALOGS + START
   });
 
   axios
-    .get(`/api/dialogs/${from}/${to}/${sort}`)
+    .get(`/api/dialogs/${from}/${to}/${sort}/${findValue}`)
     .then(res => {
       if (from === 0) {
         dispatch({
@@ -70,3 +76,8 @@ export const getDialogs = (from = 0, to = 50, sort = 'new') => dispatch => {
       });
     });
 };
+
+export const changeFindingParams = params => ({
+  type: CHANGE_DIALOG_FINDING_PARAMS,
+  payload: { params }
+});
