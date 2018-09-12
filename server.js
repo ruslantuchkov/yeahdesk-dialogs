@@ -109,4 +109,4 @@ server.listen(port, () => {
   console.info(`api-сервер запущен на порту ${port}`);
 });
 
-simulateActivity(io, currentUser.id);
+// simulateActivity(io, currentUser.id);

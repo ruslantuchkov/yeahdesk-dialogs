@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node server.js"
+    "server": "babel-node server.js",
+    "client": "cd client && npm start",
+    "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Ruslan Tuchkov",
   "license": "ISC",
@@ -19,6 +21,7 @@
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "concurrently": "^4.0.1"
   }
 }
