@@ -76,7 +76,10 @@ export const dialogs = (state = initialState, { type, payload }) => {
     const idx = state.entities.findIndex(({ id }) => id === payload.dialogID);
     const dialog = state.entities[idx];
 
-    if (dialog && !dialog.messages.find(({ id }) => id === payload.id)) {
+    if (
+      dialog &&
+      !dialog.messages.find(({ id }) => id === Number(payload.id))
+    ) {
       return {
         ...state,
 
