@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { List, Avatar, Spin } from 'antd';
+import { List, Avatar, Spin, message } from 'antd';
 import Moment from 'react-moment';
 import InfiniteScroll from 'react-infinite-scroller';
 import './DialogList.css';
@@ -21,6 +21,7 @@ class DialogList extends Component {
   handleInfiniteOnLoad = () => {
     let data = this.props.dialogs;
     if (!this.props.hasMore) {
+      message.warning('Все диалоги загружены');
       return;
     }
     this.props.getDialogs(data.length - 1, data.length - 1 + 50);
@@ -30,9 +31,7 @@ class DialogList extends Component {
     <p className="dialog-list__list-title">
       <span className="dialog-list__name">{item.name}</span>
       <span className="dialog-list__date">
-        <Moment format="DD/MM/YY">
-          {item.messages[item.messages.length - 1].date}
-        </Moment>
+        <Moment format="DD/MM/YY">{item.date}</Moment>
       </span>
     </p>
   );

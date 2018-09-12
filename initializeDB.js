@@ -50,7 +50,8 @@ const initializeDB = () => {
       avatar: chance.avatar(),
       participants,
       messages: getMessages(participants),
-      channel: ['email', chance.pick(channels)]
+      channel: ['email', chance.pick(channels)],
+      date: chance.date({ year: 2018 })
     });
   }
 

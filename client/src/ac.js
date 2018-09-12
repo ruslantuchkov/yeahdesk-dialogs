@@ -1,6 +1,7 @@
 import {
   SET_CURRENT_USER,
   LOAD_DIALOGS,
+  LOAD_MORE_DIALOGS,
   SUCCESS,
   START,
   FAIL,
@@ -32,18 +33,25 @@ export const getUsers = userIds => (dispatch, getState) => {
   );
 };
 
-export const getDialogs = (from = 0, to = 50) => dispatch => {
+export const getDialogs = (from = 0, to = 50, sort = 'new') => dispatch => {
   dispatch({
     type: LOAD_DIALOGS + START
   });
 
   axios
-    .get(`/api/dialogs/${from}/${to}`)
+    .get(`/api/dialogs/${from}/${to}/${sort}`)
     .then(res => {
-      dispatch({
-        type: LOAD_DIALOGS + SUCCESS,
-        payload: { dialogs: res.data.dialogs, hasMore: res.data.hasMore }
-      });
+      if (from === 0) {
+        dispatch({
+          type: LOAD_DIALOGS + SUCCESS,
+          payload: { dialogs: res.data.dialogs, hasMore: res.data.hasMore }
+        });
+      } else {
+        dispatch({
+          type: LOAD_MORE_DIALOGS + SUCCESS,
+          payload: { dialogs: res.data.dialogs, hasMore: res.data.hasMore }
+        });
+      }
 
       dispatch(
         getUsers([

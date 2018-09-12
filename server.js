@@ -19,9 +19,25 @@ app.get('/api/users/current', (req, res) => {
   res.json(currentUser);
 });
 
-app.get('/api/dialogs/:from/:to', ({ params: { from, to } }, res) => {
-  res.json({ dialogs: dialogs.slice(from, to), hasMore: !!dialogs[from] });
-});
+app.get(
+  '/api/dialogs/:from/:to/:sort',
+  ({ params: { from, to, sort } }, res) => {
+    let sortedDialogs;
+    if (sort === 'old') {
+      sortedDialogs = [...dialogs].sort(
+        (d1, d2) => new Date(d1.date) - new Date(d2.date)
+      );
+    } else if (sort === 'new') {
+      sortedDialogs = [...dialogs].sort(
+        (d1, d2) => new Date(d2.date) - new Date(d1.date)
+      );
+    }
+    res.json({
+      dialogs: sortedDialogs.slice(from, to),
+      hasMore: !!sortedDialogs[to + 1]
+    });
+  }
+);
 
 app.post(
   '/api/dialogs/create/:ownerId/:name',

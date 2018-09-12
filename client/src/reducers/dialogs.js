@@ -1,4 +1,4 @@
-import { LOAD_DIALOGS, SUCCESS, START } from '../constants';
+import { LOAD_DIALOGS, LOAD_MORE_DIALOGS, SUCCESS, START } from '../constants';
 
 const initialState = {
   entities: [],
@@ -12,10 +12,20 @@ export const dialogs = (state = initialState, { type, payload }) => {
     return { ...state, loading: true, loaded: false };
   }
 
-  if (type === LOAD_DIALOGS + SUCCESS) {
+  if (type === LOAD_MORE_DIALOGS + SUCCESS) {
     return {
       ...state,
       entities: [...state.entities, ...payload.dialogs],
+      loading: false,
+      loaded: true,
+      hasMore: payload.hasMore
+    };
+  }
+
+  if (type === LOAD_DIALOGS + SUCCESS) {
+    return {
+      ...state,
+      entities: [...payload.dialogs],
       loading: false,
       loaded: true,
       hasMore: payload.hasMore

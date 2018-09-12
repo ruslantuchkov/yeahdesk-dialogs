@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
+import { connect } from 'react-redux';
+import { getDialogs } from '../ac';
 
 class DialogSorting extends Component {
   state = {
-    values: ['Новые в начале', 'Старые в начале'],
-    activeValue: 'Новые в начале'
+    values: ['new', 'old'],
+    sortDirection: 'new'
   };
 
   handleValueClick = val => () => {
+    this.props.getDialogs(undefined, undefined, val);
+
     this.setState({
-      activeValue: val
+      sortDirection: val
     });
+  };
+
+  getSortValue = sortDirection => {
+    if (sortDirection === 'new') return 'Новые в начале';
+    if (sortDirection === 'old') return 'Старые в начале';
   };
 
   get menu() {
@@ -18,7 +27,7 @@ class DialogSorting extends Component {
       <Menu>
         {this.state.values.map(val => (
           <Menu.Item key={val}>
-            <a onClick={this.handleValueClick(val)}>{val}</a>
+            <a onClick={this.handleValueClick(val)}>{this.getSortValue(val)}</a>
           </Menu.Item>
         ))}
       </Menu>
@@ -35,11 +44,15 @@ class DialogSorting extends Component {
             marginLeft: '20px'
           }}
         >
-          {this.state.activeValue} <Icon type="caret-down" theme="outlined" />
+          {this.getSortValue(this.state.sortDirection)}{' '}
+          <Icon type="caret-down" theme="outlined" />
         </a>
       </Dropdown>
     );
   }
 }
 
-export default DialogSorting;
+export default connect(
+  null,
+  { getDialogs }
+)(DialogSorting);
