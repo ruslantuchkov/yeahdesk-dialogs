@@ -7,7 +7,9 @@ import {
   FAIL,
   SET_USERS_INFO,
   CHANGE_DIALOG_FINDING_PARAMS,
-  SET_CHANNELS
+  SET_CHANNELS,
+  SET_ACTIVE_DIALOG,
+  SUBMIT_CHANNEL_INPUT_TEXT
 } from './constants';
 import axios from 'axios';
 
@@ -92,4 +94,34 @@ export const getChannels = () => dispatch => {
       payload: { channels: res.data }
     });
   });
+};
+
+export const setActiveDialog = id => ({
+  type: SET_ACTIVE_DIALOG,
+  payload: { id }
+});
+
+export const addMessage = text => (dispatch, getState) => {
+  const { currentUser, activeDialog } = getState();
+  const date = new Date();
+  const messageId = Date.now();
+
+  dispatch({
+    type: SUBMIT_CHANNEL_INPUT_TEXT,
+    payload: {
+      messageId,
+      dialog: activeDialog,
+      date,
+      text,
+      owner: currentUser.id
+    }
+  });
+
+  axios
+    .post(
+      `/api/dialogs/submit/${
+        currentUser.id
+      }/${activeDialog}/${messageId}/${date}/${text}`
+    )
+    .catch(error => dispatch({ type: 'RETRIVE_LAST_MESSAGE' }));
 };

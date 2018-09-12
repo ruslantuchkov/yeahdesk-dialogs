@@ -3,7 +3,8 @@ import {
   LOAD_MORE_DIALOGS,
   SUCCESS,
   START,
-  CHANGE_DIALOG_FINDING_PARAMS
+  CHANGE_DIALOG_FINDING_PARAMS,
+  SUBMIT_CHANNEL_INPUT_TEXT
 } from '../constants';
 
 const initialState = {
@@ -43,6 +44,30 @@ export const dialogs = (state = initialState, { type, payload }) => {
     return {
       ...state,
       findingParams: { ...state.findingParams, ...payload.params }
+    };
+  }
+
+  if (type === SUBMIT_CHANNEL_INPUT_TEXT) {
+    const idx = state.entities.findIndex(({ id }) => id === payload.dialog);
+    return {
+      ...state,
+
+      entities: [
+        ...state.entities.slice(0, idx),
+        {
+          ...state.entities[idx],
+          messages: [
+            ...state.entities[idx].messages,
+            {
+              id: payload.messageId,
+              owner: payload.owner,
+              date: payload.date,
+              content: { text: payload.text }
+            }
+          ]
+        },
+        ...state.entities.slice(idx + 1)
+      ]
     };
   }
 

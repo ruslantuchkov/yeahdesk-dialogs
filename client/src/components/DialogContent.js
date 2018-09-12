@@ -1,61 +1,21 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import Message from './Message/Message';
 
 const { Content } = Layout;
 
-class DialogContent extends Component {
-  state = {
-    messages: [
-      {
-        id: 1,
-        content: {
-          text: `ToolLinks must not point to "#". Use a more descriptive href or use
-          a button instead Links must not point to "#". Use a more descriptive
-          href or use a button instead tip ToolLinks must not point to "#".
-          Use a more descriptive href or use a button instead Links must not
-          point to "#". Use a more descriptive href or use a button instead
-          tip`
-        },
-        owner: 'userID',
-        date: new Date()
-      },
-      {
-        id: 2,
-        content: {
-          text: `ToolLinks must not point to "#". Use a more descriptive href or use
-          a button instead Links must not point to "#". Use a more descriptive
-          href or use`
-        },
-        owner: 'userID',
-        date: new Date()
-      },
-      {
-        id: 3,
-        content: {
-          text: `ToolLinks must not point to "#". Use a more descriptive href or use
-          a button instead Links must not point to "#". Use a more descriptive
-          href or use a button instead tip ToolLinks must not point to "#".
-          Use a more descriptive href or use a button instead Links must not
-          point to "#". Use a more descriptive href or use a button instead
-          tip`
-        },
-        owner: 'userID',
-        date: new Date()
-      },
-      {
-        id: 4,
-        content: {
-          text: `ToolLinks must not point to "#". Use a more descriptive href or use
-          a button instead Links must not point to "#". Use a more descriptive
-          href or use`
-        },
-        owner: 'userID',
-        date: new Date()
-      }
-    ]
-  };
+const mapStateToProps = state => {
+  const activeDialog = state.dialogs.entities.find(
+    dialog => dialog.id === state.activeDialog
+  );
 
+  return {
+    messages: activeDialog ? activeDialog.messages : []
+  };
+};
+
+class DialogContent extends Component {
   render() {
     return (
       <Content
@@ -65,16 +25,20 @@ class DialogContent extends Component {
           overflow: 'auto'
         }}
       >
-        {this.state.messages.map((message, idx) => (
-          <Message
-            key={message.id}
-            {...message}
-            reversed={(idx + 1) % 2 === 0 ? true : false}
-          />
-        ))}
+        {this.props.messages.length ? (
+          this.props.messages.map((message, idx) => (
+            <Message
+              key={message.id}
+              {...message}
+              reversed={(idx + 1) % 2 === 0 ? true : false}
+            />
+          ))
+        ) : (
+          <span>Выберите диалог</span>
+        )}
       </Content>
     );
   }
 }
 
-export default DialogContent;
+export default connect(mapStateToProps)(DialogContent);

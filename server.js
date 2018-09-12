@@ -86,13 +86,13 @@ app.get('/api/users/:id', (req, res) => {
 });
 
 app.post(
-  '/api/dialogs/submit/:userID/:dialogID/:messageID/:input',
-  ({ params: { userID, dialogID, messageID, input } }, res) => {
+  '/api/dialogs/submit/:userID/:dialogID/:messageID/:date/:input',
+  ({ params: { userID, dialogID, messageID, date, input } }, res) => {
     const user = users.find(user => user.id === userID);
     if (!user) {
       return res.status(404).send();
     }
-    createMessage(io, { userID, dialogID, messageID, input });
+    createMessage(io, dialogs, { userID, dialogID, messageID, date, input });
     res.status(300).send();
   }
 );

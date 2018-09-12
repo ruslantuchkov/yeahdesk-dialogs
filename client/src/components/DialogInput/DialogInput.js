@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { Button, Input } from 'antd';
+import { connect } from 'react-redux';
 import './DialogInput.css';
+import { addMessage } from '../../ac';
 
 const { TextArea } = Input;
+
+const mapStateToProps = state => ({
+  isDialogSelected: !!state.activeDialog
+});
 
 class DialogInput extends Component {
   state = {
@@ -16,7 +22,7 @@ class DialogInput extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state.userText);
+    this.props.addMessage(this.state.userText);
   };
 
   handleChange = event => {
@@ -59,7 +65,10 @@ class DialogInput extends Component {
         <Button
           type="primary"
           htmlType="submit"
-          disabled={!!Object.keys(this.state.errors).length}
+          disabled={
+            !this.props.isDialogSelected ||
+            !!Object.keys(this.state.errors).length
+          }
           className="dialog-input__btn"
           style={{ width: 130, position: 'absolute', right: 10, bottom: 10 }}
         >
@@ -70,4 +79,7 @@ class DialogInput extends Component {
   }
 }
 
-export default DialogInput;
+export default connect(
+  mapStateToProps,
+  { addMessage }
+)(DialogInput);

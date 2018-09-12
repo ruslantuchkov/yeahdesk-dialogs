@@ -55,6 +55,6 @@
   background-color: aliceblue;
 }
 
-.dialog-list__list-item--active {
-  background-color: #fff;
+.dialog-list .dialog-list__list-item--active {
+  background-color: #fff !important;
 }

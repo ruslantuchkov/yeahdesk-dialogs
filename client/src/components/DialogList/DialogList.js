@@ -4,14 +4,15 @@ import { List, Avatar, Spin, message } from 'antd';
 import Moment from 'react-moment';
 import InfiniteScroll from 'react-infinite-scroller';
 import './DialogList.css';
-import { getDialogs, getChannels } from '../../ac';
+import { getDialogs, getChannels, setActiveDialog } from '../../ac';
 
 const mapStateToProps = state => ({
   dialogs: state.dialogs.entities,
   loading: state.dialogs.loading,
   hasMore: state.dialogs.hasMore,
   usersInfo: state.usersInfo,
-  findingParams: state.dialogs.findingParams
+  findingParams: state.dialogs.findingParams,
+  activeDialog: state.activeDialog
 });
 
 class DialogList extends Component {
@@ -35,6 +36,10 @@ class DialogList extends Component {
       search || undefined,
       channels.length ? channels.join(',') : undefined
     );
+  };
+
+  handleListItemCLick = id => {
+    this.props.setActiveDialog(id);
   };
 
   getTitle = item => (
@@ -75,7 +80,15 @@ class DialogList extends Component {
           <List
             dataSource={this.props.dialogs}
             renderItem={item => (
-              <List.Item key={item.id} className="dialog-list__list-item">
+              <List.Item
+                key={item.id}
+                className={`dialog-list__list-item${
+                  this.props.activeDialog === item.id
+                    ? ` dialog-list__list-item--active`
+                    : ``
+                }`}
+                onClick={() => this.handleListItemCLick(item.id)}
+              >
                 <List.Item.Meta
                   avatar={
                     <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
@@ -101,5 +114,5 @@ class DialogList extends Component {
 
 export default connect(
   mapStateToProps,
-  { getDialogs, getChannels }
+  { getDialogs, getChannels, setActiveDialog }
 )(DialogList);
