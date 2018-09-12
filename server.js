@@ -20,7 +20,7 @@ app.get('/api/users/current', (req, res) => {
 });
 
 app.get('/api/dialogs/:from/:to', ({ params: { from, to } }, res) => {
-  res.json(dialogs.slice(from, to));
+  res.json({ dialogs: dialogs.slice(from, to), hasMore: !!dialogs[from] });
 });
 
 app.post(
@@ -51,11 +51,7 @@ app.put(
 );
 
 app.get('/api/users/:id', (req, res) => {
-  res.json(
-    users
-      .map(({ name, id }) => ({ name, id }))
-      .find(user => user.id === req.params.id)
-  );
+  res.json(users.find(user => user.id === req.params.id));
 });
 
 app.post(

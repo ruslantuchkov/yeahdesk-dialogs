@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Icon, Layout, Button, Avatar } from 'antd';
 import './DialogHeader.css';
 
 const { Header } = Layout;
+
+const mapStateToProps = state => ({
+  currentUser: state.currentUser
+});
 
 class DialogHeader extends Component {
   render() {
@@ -24,11 +29,15 @@ class DialogHeader extends Component {
           }}
         >
           <Avatar
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+            src={
+              this.props.currentUser.avatar
+                ? this.props.currentUser.avatar
+                : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+            }
             size="small"
           />
           <span style={{ textDecoration: 'underline', marginLeft: 10 }}>
-            Current User
+            {this.props.currentUser.name ? this.props.currentUser.name : 'You'}
           </span>
         </Button>
       </Header>
@@ -36,4 +45,4 @@ class DialogHeader extends Component {
   }
 }
 
-export default DialogHeader;
+export default connect(mapStateToProps)(DialogHeader);
